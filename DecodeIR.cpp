@@ -5985,18 +5985,16 @@ int main(int argc, char** argv)
            protocol, &device, &subdevice, &obc, hex, misc_message, 
            error_message);
 
-		if (protocol[0] != '\0') 
-			std::cout 
-			<< "protocol=" << protocol 
-			<< " device=" << device 
-			<< " subdevice=" << subdevice 
-			<< " obc=" << obc 
-			<< " hex0=" << hex[0] 
-			<< " hex1=" << hex[1] 
-			<< " hex2=" << hex[2] 
-			<< " hex3=" << hex[3] 
-			<< " misc=" << misc_message 
-			<< " error=" << error_message << "\n"; 
+		if (protocol[0] != '\0') {
+			std::cout
+			<< "{\"protocol\":\""  << protocol  << "\","
+			<<  "\"device\":\""    << device    << "\",";
+			if (subdevice != -1)
+			std::cout
+			<<  "\"subdevice\":\"" << subdevice << "\",";
+			std::cout
+			<<  "\"function\":\""  << obc       << "\"}\n";
+		}
 
 	} while (protocol[0] != '\0');
 }
