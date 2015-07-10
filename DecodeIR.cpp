@@ -5980,22 +5980,21 @@ int main(int argc, char** argv)
 	char misc_message[255] = "";
 	char error_message[255] = "";
 	
-	do {
-		DecodeIR(decodeir_context, data, frequency, intro_length, rep_length, 
-           protocol, &device, &subdevice, &obc, hex, misc_message, 
-           error_message);
+	DecodeIR(decodeir_context, data, frequency, intro_length, rep_length, 
+       protocol, &device, &subdevice, &obc, hex, misc_message, 
+       error_message);
 
-		if (protocol[0] != '\0') {
-			std::cout
-			<< "{\"protocol\":\""  << protocol  << "\","
-			<<  "\"device\":\""    << device    << "\",";
-			if (subdevice != -1)
-			std::cout
-			<<  "\"subdevice\":\"" << subdevice << "\",";
-			std::cout
-			<<  "\"function\":\""  << obc       << "\"}\n";
-		}
-
-	} while (protocol[0] != '\0');
+	if (protocol[0] != '\0') {
+		std::cout
+		<< "{\"protocol\":\""  << protocol  << "\","
+		<<  "\"device\":"    << device    << ",";
+		if (subdevice != -1)
+		std::cout
+		<<  "\"subdevice\":" << subdevice << ",";
+		std::cout
+		<<  "\"function\":"  << obc       << "}\n";
+	}
+	else
+		std::cout << "{\"error\":\"Not found\"}\n";
 }
 
