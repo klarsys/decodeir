@@ -5957,8 +5957,8 @@ void DecodeIR_API DecodeIR
 int main(int argc, char** argv)
 {
 	argc--; argv++;
-	if (argc < 10) {
-		std::cout << "Usage: decodeir <pulse_width> <pulse_width> ...\n";
+	if (argc < 2) {
+		std::cout << "{\"error\":\"not found\"}\n";
 		exit(0);
 	}
 	int *data = new int[argc + 1];
@@ -5996,6 +5996,6 @@ int main(int argc, char** argv)
 		<<  "\"function\":"  << obc       << "}\n";
 	}
 	else
-		std::cout << "{\"error\":\"Not found\"}\n";
+		std::cout << "{\"error\":\"not found\"}\n";
 }
 
