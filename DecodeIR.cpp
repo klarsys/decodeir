@@ -5993,7 +5993,8 @@ int main(int argc, char** argv)
 		std::cout
 		<<  "\"subdevice\":" << subdevice << ",";
 		std::cout
-		<<  "\"function\":"  << obc       << "}\n";
+		<<  "\"function\":"  << obc       << ","
+		<<  "\"misc\":\""    << misc_message << "\"}\n";
 	}
 	else
 		std::cout << "{\"error\":\"not found\"}\n";
