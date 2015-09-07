@@ -5962,17 +5962,19 @@ int main(int argc, char** argv)
 		exit(0);
 	}
 	int *data = new int[argc + 1];
+	int prontoHex = 0;
 	data[argc] = 0;
 	for (int i = 0; i < argc; i++) {
-		sscanf(argv[i], "%d", &data[i]);
+		sscanf(argv[i], prontoHex ? "%x" : "%d", &data[i]);
 		data[i] = abs(data[i]);
-//		std::cout << i << data[i] << "\n";
+		if (i == 0 && data[i] == 0)
+			prontoHex = 1;
 	}
 	
 	unsigned int decodeir_context[2] = { 0, 0 };
-	int frequency = -1;
-	int intro_length = (argc + 1) / 2;
-	int rep_length = 0;
+	int frequency = prontoHex ? (int) (1000000.0/((double)data[1] * 0.241246)) : -1; 
+	int intro_length = prontoHex ? data[2] : ((argc + 1) / 2);
+	int rep_length = prontoHex ? data[3] : 0;
 	char protocol[255] = "";
 	int device = -1;
 	int subdevice = -1;
@@ -5981,7 +5983,7 @@ int main(int argc, char** argv)
 	char misc_message[255] = "";
 	char error_message[255] = "";
 	
-	DecodeIR(decodeir_context, data, frequency, intro_length, rep_length, 
+	DecodeIR(decodeir_context, &data[prontoHex ? 4 : 0], frequency, intro_length, rep_length, 
        protocol, &device, &subdevice, &obc, hex, misc_message, 
        error_message);
 
