@@ -5995,7 +5995,7 @@ int main(int argc, char** argv)
 		std::cout
 		<<  "\"subdevice\":" << subdevice << ",";
 		std::cout
-		<<  "\"function\":"  << obc       << ","
+		<<  "\"obc\":"       << obc       << ","
 		<<  "\"misc\":\""    << misc_message << "\"}\n";
 	}
 	else
