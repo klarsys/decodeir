@@ -5954,58 +5954,51 @@ void DecodeIR_API DecodeIR
 }
 }
 
-int main(int argc, char* argv[]) 
+int main(int argc, char** argv)
 {
-  unsigned int i = 1; 
-  int type; 
-  sscanf(argv[i++], "%x", &type); 
-  if (type != 0) 
-{
-    std::cerr << "Can only handle type 0000\n"; 
-    exit(1); 
-    }
-  int fcode; 
-  sscanf(argv[i++], "%x", &fcode); 
-  int frequency = (int) (1000000.0/((double)fcode * 0.241246)); 
-  int intro_length, rep_length; 
-  sscanf(argv[i++], "%x", &intro_length); 
-  sscanf(argv[i++], "%x", &rep_length); 
+	argc--; argv++;
+	if (argc < 2) {
+		std::cout << "{\"error\":\"not found\"}\n";
+		exit(0);
+	}
+	int *data = new int[argc + 1];
+	int prontoHex = 0;
+	data[argc] = 0;
+	for (int i = 0; i < argc; i++) {
+		sscanf(argv[i], prontoHex ? "%x" : "%d", &data[i]);
+		data[i] = abs(data[i]);
+		if (i == 0 && data[i] == 0)
+			prontoHex = 1;
+	}
+	
+	unsigned int decodeir_context[2] = { 0, 0 };
+	int frequency = prontoHex ? (int) (1000000.0/((double)data[1] * 0.241246)) : -1; 
+	int intro_length = prontoHex ? data[2] : ((argc + 1) / 2);
+	int rep_length = prontoHex ? data[3] : 0;
+	char protocol[255] = "";
+	int device = -1;
+	int subdevice = -1;
+	int obc = -1;
+	int hex[4] = { -1, -1, -1, -1 };
+	char misc_message[255] = "";
+	char error_message[255] = "";
+	
+	DecodeIR(decodeir_context, &data[prontoHex ? 4 : 0], frequency, intro_length, rep_length, 
+       protocol, &device, &subdevice, &obc, hex, misc_message, 
+       error_message);
 
-  int *data = new int[2*(intro_length+rep_length)]; 
-  for (int j = 0; j < 2*(intro_length+rep_length); j++) 
-    {
-    int ncycles; 
-    sscanf(argv[i++], "%x", &ncycles); 
-    data[j] = (int)(1000000.0/frequency*ncycles); 
-    }
-  unsigned int decodeir_context[2] = { 0, 0}; 
-  char protocol[255] = ""; 
-  int device = -1; 
-  int subdevice = -1; 
-  int obc = -1; 
-  int hex[4] = { -1, -1, -1, -1}; 
-  char misc_message[255] = ""; 
-  char error_message[255] = ""; 
-    
-  do 
-    {
-    DecodeIR(decodeir_context, data, frequency, intro_length, rep_length, 
-           protocol, &device, &subdevice, &obc, hex, misc_message, 
-           error_message); 
-
-    if (protocol[0] != '\0') 
-      std::cout 
-      << "protocol=" << protocol 
-      << " device=" << device 
-      << " subdevice=" << subdevice 
-      << " obc=" << obc 
-      << " hex0=" << hex[0] 
-      << " hex1=" << hex[1] 
-      << " hex2=" << hex[2] 
-      << " hex3=" << hex[3] 
-      << " misc=" << misc_message 
-      << " error=" << error_message << "\n"; 
-    }
-  while (protocol[0] != '\0'); 
+	if (protocol[0] != '\0') {
+		std::cout
+		<< "{\"protocol\":\""  << protocol  << "\","
+		<<  "\"device\":"    << device    << ",";
+		if (subdevice != -1)
+		std::cout
+		<<  "\"subdevice\":" << subdevice << ",";
+		std::cout
+		<<  "\"function\":"  << obc       << ","
+		<<  "\"misc\":\""    << misc_message << "\"}\n";
+	}
+	else
+		std::cout << "{\"error\":\"not found\"}\n";
 }
 
