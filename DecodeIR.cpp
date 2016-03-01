@@ -2293,13 +2293,12 @@ find_two_sizes:
 				&& cBits[1] == 135   
 				&& (parity(getMsb(17,15)) != getMsb(16,1)) ) // parity() returns odd parity
 			{
-				strcpy(pProtocol, "Apple" );
+				sprintf(pProtocol, "Apple-%d", cBits[3]);
 				if (cBits[0] == 14) strcat(pProtocol,"--pairing");
 				*pDevice = cBits[0];
 				*pSubDevice = cBits[1];
 				*pOBC = cBits[2] >> 1;
 				*pHex = msb(255-cBits[2]);
-				sprintf(pMisc, "PairID=%d", cBits[3]);
 				return;
 			}
 			strcpy(pSuffix, "" );
