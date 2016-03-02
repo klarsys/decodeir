@@ -5982,6 +5982,10 @@ int main(int argc, char** argv)
 	char misc_message[255] = "";
 	char error_message[255] = "";
 	
+	if (prontoHex)
+		for (int i = 4; i < argc; i++)
+			data[i] = 1000000.0 / frequency*data[i] + 0.5;
+	
 	DecodeIR(decodeir_context, &data[prontoHex ? 4 : 0], frequency, intro_length, rep_length, 
        protocol, &device, &subdevice, &obc, hex, misc_message, 
        error_message);
@@ -5993,6 +5997,9 @@ int main(int argc, char** argv)
 		if (subdevice != -1)
 		std::cout
 		<<  "\"subdevice\":" << subdevice << ",";
+		if (frequency != -1)
+		std::cout
+		<<  "\"frequency\":" << frequency << ",";
 		std::cout
 		<<  "\"obc\":"       << obc       << ","
 		<<  "\"misc\":\""    << misc_message << "\"}\n";
