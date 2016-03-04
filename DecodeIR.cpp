@@ -5987,10 +5987,10 @@ int main(int argc, char** argv)
 			data[i] = 1000000.0 / frequency*data[i] + 0.5;
 	
 	DecodeIR(decodeir_context, &data[prontoHex ? 4 : 0], frequency, intro_length, rep_length, 
-       protocol, &device, &subdevice, &obc, hex, misc_message, 
-       error_message);
+		protocol, &device, &subdevice, &obc, hex, misc_message, 
+		error_message);
 
-	if (protocol[0] != '\0') {
+	if (protocol[0] != '\0' && strncmp(protocol, "Gap-", 4) && strncmp(protocol, "Async", 5)) {
 		std::cout
 		<< "{\"protocol\":\""  << protocol  << "\","
 		<<  "\"device\":"    << device    << ",";
